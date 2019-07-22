@@ -9,6 +9,7 @@ class App extends Component {
   state = {
     sushiPool: [],
     currentSushis: [],
+    sushiIndex: 0,
     plates: [],
     currentMoney: 100
   }
@@ -17,13 +18,11 @@ class App extends Component {
     fetch(API)
     .then(resp => resp.json())
     .then(sushis => {
-      let randSushi = []
-      for (var i = 0; i < 4; i++) {
-        randSushi.push(sushis[Math.floor(Math.random() * sushis.length)]);
-      }
+      let randSushi = sushis.slice(this.state.sushiIndex,this.state.sushiIndex + 4)
       this.setState({
         sushiPool: sushis,
-        currentSushis: randSushi
+        currentSushis: randSushi,
+        sushiIndex: this.state.sushiIndex + 4
       })
     })
   }
@@ -37,11 +36,11 @@ class App extends Component {
   }
 
   moreSushi = () => {
-    let newSushis = []
-    for (var i = 0; i < 4; i++) {
-      newSushis.push(this.state.sushiPool[Math.floor(Math.random() * this.state.sushiPool.length)]);
-    }
-    this.setState({ currentSushis: newSushis })
+    let newSushis = this.state.sushiPool.slice(this.state.sushiIndex,this.state.sushiIndex + 4)
+    this.setState({
+      currentSushis: newSushis,
+      sushiIndex: this.state.sushiIndex + 4
+    })
   }
 
   addMoney = (amount) => {
@@ -53,7 +52,8 @@ class App extends Component {
   render() {
     return (
       <div className="app">
-        <SushiContainer  fourSushis={this.state.currentSushis} moreSushi={this.moreSushi} addPlates={this.addPlates} currentWallet={this.state.currentMoney} addMoney={this.addMoney}/>
+        <SushiContainer fourSushis={this.state.currentSushis} moreSushi={this.moreSushi} addPlates={this.addPlates} currentWallet={this.state.currentMoney} addMoney={this.addMoney}/>
+
         <Table currentPlates={this.state.plates} currentMoney={this.state.currentMoney}/>
       </div>
     );
