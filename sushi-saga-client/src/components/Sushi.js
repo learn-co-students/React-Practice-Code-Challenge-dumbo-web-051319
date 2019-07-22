@@ -1,23 +1,40 @@
 import React, { Fragment } from 'react'
 
-const Sushi = (props) => {
-  return (
-    <div className="sushi">
-      <div className="plate" 
-           onClick={/* Give me a callback! */ null}>
-        { 
-          /* Tell me if this sushi has been eaten! */ 
-          true ?
-            null
-          :
-            <img src={/* Give me an image source! */} width="100%" />
-        }
-      </div>
-      <h4 className="sushi-details">
-        {/* Give me a name! */} - ${/* Give me a price! */}
-      </h4>
-    </div>
-  )
-}
+export default class Sushi extends React.Component {
+  state = {
+    eaten: false,
+    mySushi: this.props.data.name,
+    currentPrice: this.props.data.price
+  }
 
-export default Sushi
+  handleClick = (event) => {
+    if(this.props.currentWallet >= this.state.currentPrice) {
+      this.setState({
+        eaten: true
+      })
+      this.props.addPlates(this.state.mySushi, this.state.currentPrice)
+    } else {
+      alert("You ran out of money 😿")
+    }
+  }
+
+  render () {
+    return (
+      <div className="sushi">
+        <div className="plate"
+             onClick={this.handleClick}>
+          {
+            this.state.eaten ?
+              null
+            :
+              <img src={this.props.data.img_url} alt="a sushi" width="100%" />
+          }
+        </div>
+        <h4 className="sushi-details">
+          {this.props.data.name} - ${this.props.data.price}
+        </h4>
+      </div>
+    )
+  }
+
+}
