@@ -1,9 +1,32 @@
 import React from 'react'
 
-const MoreButton = (props) => {
-    return <button onClick={/* Fill me in! */ null}>
-            More sushi!
-          </button>
-}
+export default class MoreButton extends React.Component {
+  handleClick = () => {
+    this.props.moreSushi()
+  }
 
-export default MoreButton
+  handleSubmit = (event) => {
+    event.preventDefault()
+    let amount = parseInt(event.target.money.value, 10)
+    this.props.addMoney(amount)
+    event.target.reset()
+  }
+
+  render() {
+    return (
+      <div>
+        <button onClick={this.handleClick}>
+          More sushi!
+        </button>
+        <form onSubmit={this.handleSubmit}>
+          Add More Money?
+          <br/>
+          <input type="number" name="money"/>
+          <br/>
+          <input type="submit" value="money pls"/>
+        </form>
+      </div>
+    )
+  }
+
+}
